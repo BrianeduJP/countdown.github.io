@@ -1,0 +1,2100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高中日语学习助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+        
+        .logo p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        /* 右上角制作日期 */
+        .creation-date {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        .main-layout {
+            display: flex;
+            gap: 25px;
+        }
+        
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+        }
+        
+        .main-content {
+            flex: 1;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f2f5;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title i {
+            color: #3498db;
+        }
+        
+        .exam-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .exam-type {
+            padding: 15px 10px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .exam-type:hover {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+        
+        .exam-type.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .year-input-group {
+            position: relative;
+        }
+        
+        .year-input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .year-input-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .year-hint {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
+            display: block;
+        }
+        
+        .btn {
+            padding: 14px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn-warning {
+            background: #e74c3c;
+        }
+        
+        .btn-warning:hover {
+            background: #c0392b;
+        }
+        
+        .btn-success {
+            background: #2ecc71;
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+        }
+        
+        .btn-info {
+            background: #9b59b6;
+        }
+        
+        .btn-info:hover {
+            background: #8e44ad;
+        }
+        
+        .countdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .exam-count {
+            font-size: 1rem;
+            color: #6c757d;
+            background: #f8f9fa;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+        
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .countdown-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .countdown-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .countdown-card.urgent {
+            border-left-color: #e74c3c;
+        }
+        
+        .countdown-card.completed {
+            border-left-color: #95a5a6;
+            opacity: 0.7;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .exam-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .exam-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .countdown-display {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+        
+        .time-unit {
+            flex: 1;
+        }
+        
+        .time-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #3498db;
+            line-height: 1;
+        }
+        
+        .time-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .urgent .time-value {
+            color: #e74c3c;
+        }
+        
+        .completed .time-value {
+            color: #95a5a6;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .card-actions .btn {
+            flex: 1;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+        
+        /* 筛选功能样式 */
+        .filter-container {
+            margin-bottom: 20px;
+        }
+        
+        .filter-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        /* 视图切换样式 */
+        .view-switcher {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .view-btn {
+            flex: 1;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .view-btn:hover {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+        
+        .view-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        /* 日历视图样式 */
+        .calendar-container {
+            display: none;
+        }
+        
+        .calendar-container.active {
+            display: block;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-month {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .calendar-nav-btn {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-nav-btn:hover {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e9ecef;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .calendar-day-header {
+            background: #f8f9fa;
+            padding: 12px 0;
+            text-align: center;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .calendar-day {
+            background: white;
+            min-height: 100px;
+            padding: 8px;
+            position: relative;
+        }
+        
+        .calendar-day.other-month {
+            background: #f8f9fa;
+            color: #adb5bd;
+        }
+        
+        .calendar-day-number {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .calendar-day.other-month .calendar-day-number {
+            color: #adb5bd;
+        }
+        
+        .calendar-day.today .calendar-day-number {
+            background: #3498db;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .calendar-exams {
+            margin-top: 25px;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+        
+        .calendar-exam-item {
+            background: #e3f2fd;
+            border-left: 3px solid #3498db;
+            padding: 6px 8px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-exam-item:hover {
+            background: #d1e7fd;
+            transform: translateX(2px);
+        }
+        
+        .calendar-exam-item.urgent {
+            background: #ffeaea;
+            border-left-color: #e74c3c;
+        }
+        
+        .calendar-exam-item.completed {
+            background: #f8f9fa;
+            border-left-color: #95a5a6;
+        }
+        
+        .calendar-exam-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .calendar-exam-type {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+        
+        .secondary-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .menu-content {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background: white;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        .menu-header {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .menu-header h2 {
+            font-size: 1.5rem;
+        }
+        
+        .close-menu {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .menu-body {
+            padding: 20px;
+        }
+        
+        .iframe-container {
+            width: 100%;
+            height: calc(100vh - 120px);
+            border: none;
+        }
+        
+        .volunteer-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .volunteer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .volunteer-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .volunteer-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .volunteer-desc {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+        
+        .no-exams {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+        
+        .no-exams i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        /* 版本号样式 */
+        .version-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .version-btn {
+            background: rgba(52, 152, 219, 0.9);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+        
+        .version-btn:hover {
+            background: rgba(41, 128, 185, 0.9);
+            transform: translateY(-2px);
+        }
+        
+        /* 更新日志弹窗样式 */
+        .update-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .update-modal.active {
+            display: flex;
+        }
+        
+        .update-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .update-header {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .update-header h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .update-body {
+            padding: 25px;
+        }
+        
+        .update-log {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .update-log .version {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-top: 15px;
+            display: block;
+        }
+        
+        .update-log .version:first-child {
+            margin-top: 0;
+        }
+        
+        .close-update {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* 错误提示样式 */
+        .error-message {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 离线状态指示器 */
+        .offline-indicator {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            z-index: 1002;
+            display: none;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+        
+        .offline-indicator.show {
+            display: block;
+            animation: slideInDown 0.3s ease;
+        }
+        
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translate(-50%, -20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+        
+        /* 移动端特定样式 - 倒计时在上，添加功能在下 */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column-reverse;
+                gap: 20px;
+            }
+            
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .creation-date {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-top: 10px;
+                text-align: center;
+            }
+            
+            .exam-type-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .countdown-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-content {
+                width: 100%;
+            }
+            
+            .version-container {
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .exam-type {
+                padding: 12px 8px;
+                font-size: 0.9rem;
+            }
+            
+            .countdown-card {
+                padding: 20px;
+            }
+            
+            .time-value {
+                font-size: 1.8rem;
+            }
+            
+            .time-label {
+                font-size: 0.8rem;
+            }
+            
+            .btn {
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+            
+            .input-group input {
+                padding: 10px 12px;
+            }
+            
+            .volunteer-card {
+                padding: 20px;
+            }
+            
+            .volunteer-icon {
+                font-size: 2.5rem;
+            }
+            
+            .volunteer-title {
+                font-size: 1.3rem;
+            }
+            
+            .volunteer-desc {
+                font-size: 0.9rem;
+            }
+            
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+            }
+            
+            .calendar-day {
+                min-height: 80px;
+            }
+        }
+        
+        /* 小屏幕手机优化 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 20px 15px;
+            }
+            
+            .card-title {
+                font-size: 1.2rem;
+            }
+            
+            .exam-type-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .exam-type {
+                padding: 10px 6px;
+                font-size: 0.85rem;
+            }
+            
+            .time-value {
+                font-size: 1.6rem;
+            }
+            
+            .calendar-day {
+                min-height: 70px;
+                padding: 4px;
+            }
+            
+            .calendar-day-number {
+                top: 4px;
+                right: 4px;
+                font-size: 0.9rem;
+            }
+            
+            .calendar-exam-item {
+                padding: 4px 6px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="creation-date">制作日期：2026.05.11</div>
+            <div class="header-content">
+                <div class="logo">
+                    <h1><i class="fas fa-graduation-cap"></i> 高中日语学习助手 </h1>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-layout">
+            <main class="main-content">
+                <div class="card">
+                    <div class="countdown-header">
+                        <h2 class="card-title"><i class="fas fa-clock"></i> 考试倒计时</h2>
+                        <div class="exam-count" id="examCount">共 0 个考试</div>
+                    </div>
+                    
+                    <!-- 视图切换按钮 -->
+                    <div class="view-switcher">
+                        <button class="view-btn active" data-view="list">
+                            <i class="fas fa-list"></i> 列表视图
+                        </button>
+                        <button class="view-btn" data-view="calendar">
+                            <i class="fas fa-calendar-alt"></i> 日历视图
+                        </button>
+                    </div>
+                    
+                    <!-- 按月筛选 -->
+                    <div class="filter-container">
+                        <select id="monthFilter" class="filter-select">
+                            <option value="all" selected>全部月份</option>
+                            <option value="1">1月</option>
+                            <option value="2">2月</option>
+                            <option value="3">3月</option>
+                            <option value="4">4月</option>
+                            <option value="5">5月</option>
+                            <option value="6">6月</option>
+                            <option value="7">7月</option>
+                            <option value="8">8月</option>
+                            <option value="9">9月</option>
+                            <option value="10">10月</option>
+                            <option value="11">11月</option>
+                            <option value="12">12月</option>
+                        </select>
+                    </div>
+                    
+                    <div id="errorMessage" class="error-message"></div>
+                    
+                    <!-- 列表视图 -->
+                    <div id="listView" class="list-container">
+                        <div id="countdownContainer" class="countdown-grid">
+                            <!-- 倒计时卡片将通过JavaScript动态生成 -->
+                        </div>
+                        
+                        <div id="noExamsMessage" class="no-exams">
+                            <i class="fas fa-calendar-plus"></i>
+                            <h3>暂无考试倒计时</h3>
+                            <p>请在下方添加考试来开始使用</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 日历视图 -->
+                    <div id="calendarView" class="calendar-container">
+                        <div class="calendar-header">
+                            <div class="calendar-month" id="currentMonth"></div>
+                            <div class="calendar-nav">
+                                <button class="calendar-nav-btn" id="prevMonth">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button class="calendar-nav-btn" id="todayBtn">今天</button>
+                                <button class="calendar-nav-btn" id="nextMonth">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar-grid" id="calendarGrid">
+                            <!-- 日历内容将通过JavaScript动态生成 -->
+                        </div>
+                        
+                        <div class="no-exams" id="noCalendarExams">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h3>本月无考试安排</h3>
+                            <p>请在下方添加考试来开始使用</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <aside class="sidebar">
+                <div class="volunteer-card" id="volunteerCard">
+                    <div class="volunteer-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="volunteer-title">模拟志愿填报</div>
+                    <div class="volunteer-desc">点击进入高考模拟志愿系统</div>
+                </div>
+                
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-calculator"></i> 添加考试倒计时</h2>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-calendar-alt"></i> 选择考试类型</label>
+                        <div class="exam-type-grid" id="examTypeSelector">
+                            <div class="exam-type active" data-type="weekly">周考</div>
+                            <div class="exam-type" data-type="monthly">月考</div>
+                            <div class="exam-type" data-type="midterm">期中考试</div>
+                            <div class="exam-type" data-type="final">期末考试</div>
+                            <div class="exam-type" data-type="academic-test">毕业学考</div>
+                            <div class="exam-type" data-type="first-model">一模</div>
+                            <div class="exam-type" data-type="second-model">二模</div>
+                            <div class="exam-type" data-type="third-model">三模</div>
+                            <div class="exam-type" data-type="other">其他</div>
+                            <div class="exam-type" data-type="gaokao">高考</div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="examDate"><i class="fas fa-calendar-day"></i> 考试日期</label>
+                        <input type="date" id="examDate" class="form-control">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="examName"><i class="fas fa-edit"></i> 考试名称（可选）</label>
+                        <input type="text" id="examName" class="form-control" placeholder="例如：高三第一次月考">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="graduationYearInput"><i class="fas fa-calendar"></i> 毕业年份（高考用）</label>
+                        <div class="year-input-group">
+                            <input type="number" id="graduationYearInput" class="form-control" 
+                                   placeholder="请输入毕业年份" 
+                                   min="1900" max="2100">
+                            <span class="year-hint">手动输入毕业年份，如：2025、2026等</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 统一长度的按钮 -->
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button id="addExamBtn" class="btn">
+                            <i class="fas fa-plus-circle"></i> 添加倒计时
+                        </button>
+                        
+                        <button id="clearDataBtn" class="btn btn-warning">
+                            <i class="fas fa-trash"></i> 清空所有数据
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+        <!-- 版本号容器 -->
+        <div class="version-container">
+            <button class="version-btn" id="versionBtn">V2.3.11.260511</button>
+        </div>
+        
+        <!-- 离线状态指示器 -->
+        <div class="offline-indicator" id="offlineIndicator">
+            <i class="fas fa-wifi-slash"></i> 当前处于离线模式
+        </div>
+        
+        <!-- 更新日志弹窗 -->
+        <div class="update-modal" id="updateModal">
+            <div class="update-content">
+                <div class="update-header">
+                    <h2><i class="fas fa-history"></i> 更新日志 V2.3.11.260511</h2>
+                    <button class="close-update" id="closeUpdateBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="update-body">
+                    <div class="update-log" id="updateLog">
+                        V2.3.11.260511<br>
+                        月份筛选默认改为全部月份<br>
+                        <br>
+                        V2.2.10.260511<br>
+                        优化编辑功能，点击编辑直接进入编辑状态<br>
+                        优化日期排版<br>
+                        <br>
+                        V2.1.9.260511<br>
+                        重置版本号命名逻辑：<br>
+                        第三位数为更新次数，每次更新递增<br>
+                        删除搜索框<br>
+                        删除导出导入功能<br>
+                        统一按钮长度<br>
+                        添加按月筛选功能<br>
+                        添加日历视图<br>
+                        日历显示已添加的考试<br>
+                        <br>
+                        V2.0.0.260511<br>
+                        添加考试搜索筛选功能<br>
+                        添加数据导入/导出功能<br>
+                        代码模块化重构<br>
+                        完善错误处理机制<br>
+                        优化倒计时性能（使用requestAnimationFrame）<br>
+                        支持离线使用<br>
+                        实现批量删除/编辑考试<br>
+                        <br>
+                        V1.5.0.260511<br>
+                        优化移动端布局<br>
+                        <br>
+                        V1.4.1.260511<br>
+                        删除保存数据按钮，编辑后自动保存<br>
+                        毕业年份默认为当年<br>
+                        删除本地模拟数据<br>
+                        <br>
+                        V1.4.0.260511<br>
+                        添加数据本地存储功能<br>
+                        修改毕业年份为手动输入<br>
+                        右上角添加制作日期<br>
+                        <br>
+                        V1.3.0.260511<br>
+                        修复毕业年份选择器<br>
+                        <br>
+                        V1.2.0.260511<br>
+                        优化模拟志愿布局<br>
+                        优化志愿功能以二级菜单显示<br>
+                        <br>
+                        V1.1.0.260511<br>
+                        修复网站使用bug<br>
+                        <br>
+                        V1.0.0.260511<br>
+                        初始版本发布<br>
+                        添加倒计时，接入模拟志愿接口
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 二级菜单（模拟志愿页面） -->
+        <div class="secondary-menu" id="secondaryMenu">
+            <div class="menu-content">
+                <div class="menu-header">
+                    <h2><i class="fas fa-university"></i> 高考模拟志愿系统</h2>
+                    <button class="close-menu" id="closeMenuBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="menu-body">
+                    <iframe src="https://gaokao.baidu.com/okam/pages/cwb-page/index" 
+                            class="iframe-container" 
+                            id="volunteerFrame"
+                            title="高考模拟志愿系统"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 数据管理模块 ====================
+        const DataManager = (function() {
+            const STORAGE_KEY = 'japanese_exam_countdown_data_v2';
+            let exams = [];
+            
+            return {
+                loadData: function() {
+                    try {
+                        const savedData = localStorage.getItem(STORAGE_KEY);
+                        if (savedData) {
+                            const parsedData = JSON.parse(savedData);
+                            exams = parsedData.exams.map(exam => ({
+                                ...exam,
+                                date: new Date(exam.date),
+                                added: new Date(exam.added)
+                            }));
+                            return { success: true, data: exams };
+                        }
+                        return { success: true, data: [] };
+                    } catch (error) {
+                        return { 
+                            success: false, 
+                            error: '数据加载失败: ' + error.message 
+                        };
+                    }
+                },
+                
+                saveData: function() {
+                    try {
+                        const data = {
+                            exams: exams,
+                            timestamp: new Date().toISOString(),
+                            version: '2.3.11.260511'
+                        };
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                        return { success: true };
+                    } catch (error) {
+                        return { 
+                            success: false, 
+                            error: '数据保存失败: ' + error.message 
+                        };
+                    }
+                },
+                
+                getExams: function() {
+                    return [...exams];
+                },
+                
+                getExamsByMonth: function(month) {
+                    if (month === 'all') return exams;
+                    return exams.filter(exam => exam.date.getMonth() + 1 === parseInt(month));
+                },
+                
+                getExamsByDate: function(date) {
+                    return exams.filter(exam => 
+                        exam.date.getDate() === date.getDate() &&
+                        exam.date.getMonth() === date.getMonth() &&
+                        exam.date.getFullYear() === date.getFullYear()
+                    );
+                },
+                
+                getExamsByMonthYear: function(year, month) {
+                    return exams.filter(exam => 
+                        exam.date.getFullYear() === year &&
+                        exam.date.getMonth() === month
+                    );
+                },
+                
+                addExam: function(exam) {
+                    try {
+                        const newExam = {
+                            ...exam,
+                            id: Date.now() + Math.random()
+                        };
+                        exams.push(newExam);
+                        exams.sort((a, b) => a.date - b.date);
+                        this.saveData();
+                        return { success: true, exam: newExam };
+                    } catch (error) {
+                        return { 
+                            success: false, 
+                            error: '添加考试失败: ' + error.message 
+                        };
+                    }
+                },
+                
+                removeExam: function(id) {
+                    try {
+                        const index = exams.findIndex(exam => exam.id === id);
+                        if (index !== -1) {
+                            exams.splice(index, 1);
+                            this.saveData();
+                            return { success: true };
+                        }
+                        return { success: false, error: '未找到考试' };
+                    } catch (error) {
+                        return { 
+                            success: false, 
+                            error: '删除考试失败: ' + error.message 
+                        };
+                    }
+                },
+                
+                clearData: function() {
+                    try {
+                        exams = [];
+                        localStorage.removeItem(STORAGE_KEY);
+                        return { success: true };
+                    } catch (error) {
+                        return { 
+                            success: false, 
+                            error: '清空数据失败: ' + error.message 
+                        };
+                    }
+                }
+            };
+        })();
+        
+        // ==================== 错误处理模块 ====================
+        const ErrorHandler = (function() {
+            let errorContainer = null;
+            
+            return {
+                init: function(containerId) {
+                    errorContainer = document.getElementById(containerId);
+                },
+                
+                showError: function(message, duration = 5000) {
+                    if (!errorContainer) return;
+                    
+                    errorContainer.textContent = message;
+                    errorContainer.classList.add('show');
+                    
+                    setTimeout(() => {
+                        this.hideError();
+                    }, duration);
+                },
+                
+                hideError: function() {
+                    if (errorContainer) {
+                        errorContainer.classList.remove('show');
+                    }
+                },
+                
+                handleError: function(error, context = '操作') {
+                    console.error(`${context}错误:`, error);
+                    this.showError(`${context}失败: ${error.message || error}`);
+                }
+            };
+        })();
+        
+        // ==================== 倒计时管理模块 ====================
+        const CountdownManager = (function() {
+            let animationFrameId = null;
+            let lastUpdateTime = 0;
+            const UPDATE_INTERVAL = 1000;
+            
+            return {
+                start: function(updateCallback) {
+                    const updateLoop = (currentTime) => {
+                        if (currentTime - lastUpdateTime >= UPDATE_INTERVAL) {
+                            updateCallback();
+                            lastUpdateTime = currentTime;
+                        }
+                        animationFrameId = requestAnimationFrame(updateLoop);
+                    };
+                    
+                    animationFrameId = requestAnimationFrame(updateLoop);
+                },
+                
+                stop: function() {
+                    if (animationFrameId) {
+                        cancelAnimationFrame(animationFrameId);
+                        animationFrameId = null;
+                    }
+                },
+                
+                calculateTimeLeft: function(targetDate) {
+                    const now = new Date();
+                    const diff = targetDate.getTime() - now.getTime();
+                    
+                    if (diff <= 0) {
+                        return { 
+                            days: 0, 
+                            hours: 0, 
+                            minutes: 0, 
+                            seconds: 0,
+                            isOverdue: true 
+                        };
+                    }
+                    
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    
+                    return {
+                        days: days.toString().padStart(2, '0'),
+                        hours: hours.toString().padStart(2, '0'),
+                        minutes: minutes.toString().padStart(2, '0'),
+                        seconds: seconds.toString().padStart(2, '0'),
+                        isOverdue: false,
+                        totalDays: days
+                    };
+                }
+            };
+        })();
+        
+        // ==================== 日历管理模块 ====================
+        const CalendarManager = (function() {
+            let currentDate = new Date();
+            
+            return {
+                getCurrentDate: function() {
+                    return new Date(currentDate);
+                },
+                
+                setCurrentDate: function(date) {
+                    currentDate = new Date(date);
+                },
+                
+                gotoToday: function() {
+                    currentDate = new Date();
+                },
+                
+                gotoPrevMonth: function() {
+                    currentDate.setMonth(currentDate.getMonth() - 1);
+                },
+                
+                gotoNextMonth: function() {
+                    currentDate.setMonth(currentDate.getMonth() + 1);
+                },
+                
+                getMonthYearString: function() {
+                    const year = currentDate.getFullYear();
+                    const month = currentDate.getMonth() + 1;
+                    return `${year}年${month}月`;
+                },
+                
+                getMonthDays: function() {
+                    const year = currentDate.getFullYear();
+                    const month = currentDate.getMonth();
+                    
+                    const firstDay = new Date(year, month, 1);
+                    const lastDay = new Date(year, month + 1, 0);
+                    const daysInMonth = lastDay.getDate();
+                    
+                    const firstDayOfWeek = firstDay.getDay();
+                    const lastDayOfWeek = lastDay.getDay();
+                    
+                    const days = [];
+                    
+                    const prevMonth = new Date(year, month, 0);
+                    const prevMonthDays = prevMonth.getDate();
+                    
+                    for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+                        const day = new Date(year, month - 1, prevMonthDays - i);
+                        days.push({
+                            date: day,
+                            isCurrentMonth: false
+                        });
+                    }
+                    
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const day = new Date(year, month, i);
+                        days.push({
+                            date: day,
+                            isCurrentMonth: true
+                        });
+                    }
+                    
+                    for (let i = 1; i <= 6 - lastDayOfWeek; i++) {
+                        const day = new Date(year, month + 1, i);
+                        days.push({
+                            date: day,
+                            isCurrentMonth: false
+                        });
+                    }
+                    
+                    return days;
+                }
+            };
+        })();
+        
+        // ==================== 视图管理模块 ====================
+        const ViewManager = (function() {
+            let currentView = 'list';
+            
+            return {
+                setView: function(view) {
+                    currentView = view;
+                    
+                    document.querySelectorAll('.view-btn').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.view === view);
+                    });
+                    
+                    document.getElementById('listView').style.display = view === 'list' ? 'block' : 'none';
+                    document.getElementById('calendarView').classList.toggle('active', view === 'calendar');
+                },
+                
+                getCurrentView: function() {
+                    return currentView;
+                }
+            };
+        })();
+        
+        // ==================== 离线管理模块 ====================
+        const OfflineManager = (function() {
+            let isOffline = !navigator.onLine;
+            let indicator = null;
+            
+            return {
+                init: function() {
+                    indicator = document.getElementById('offlineIndicator');
+                    
+                    window.addEventListener('online', () => {
+                        this.setOnlineStatus();
+                    });
+                    
+                    window.addEventListener('offline', () => {
+                        this.setOfflineStatus();
+                    });
+                    
+                    if (isOffline) {
+                        this.setOfflineStatus();
+                    }
+                },
+                
+                setOfflineStatus: function() {
+                    isOffline = true;
+                    if (indicator) {
+                        indicator.classList.add('show');
+                    }
+                },
+                
+                setOnlineStatus: function() {
+                    isOffline = false;
+                    if (indicator) {
+                        indicator.classList.remove('show');
+                    }
+                },
+                
+                isOffline: function() {
+                    return isOffline;
+                }
+            };
+        })();
+        
+        // ==================== 主应用逻辑 ====================
+        const App = (function() {
+            let exams = [];
+            let currentExamType = 'weekly';
+            let filteredExams = [];
+            let selectedMonth = 'all';
+            
+            return {
+                init: function() {
+                    this.initDOM();
+                    this.initEventListeners();
+                    this.loadExams();
+                    this.setupDefaultValues();
+                    this.startCountdown();
+                    this.renderCalendar();
+                    OfflineManager.init();
+                    ErrorHandler.init('errorMessage');
+                },
+                
+                initDOM: function() {
+                    // DOM元素会在事件监听器中初始化
+                },
+                
+                initEventListeners: function() {
+                    // 考试类型选择
+                    document.querySelectorAll('.exam-type').forEach(type => {
+                        type.addEventListener('click', (e) => this.onExamTypeClick(e));
+                    });
+                    
+                    // 添加考试按钮
+                    document.getElementById('addExamBtn').addEventListener('click', () => this.addExam());
+                    
+                    // 清空数据按钮
+                    document.getElementById('clearDataBtn').addEventListener('click', () => this.clearData());
+                    
+                    // 月份筛选
+                    document.getElementById('monthFilter').addEventListener('change', (e) => this.onMonthFilterChange(e));
+                    
+                    // 视图切换
+                    document.querySelectorAll('.view-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => this.onViewChange(e));
+                    });
+                    
+                    // 日历导航
+                    document.getElementById('prevMonth').addEventListener('click', () => this.onPrevMonth());
+                    document.getElementById('nextMonth').addEventListener('click', () => this.onNextMonth());
+                    document.getElementById('todayBtn').addEventListener('click', () => this.onToday());
+                    
+                    // 版本号点击
+                    document.getElementById('versionBtn').addEventListener('click', () => this.openUpdateModal());
+                    document.getElementById('closeUpdateBtn').addEventListener('click', () => this.closeUpdateModal());
+                    document.getElementById('updateModal').addEventListener('click', (e) => {
+                        if (e.target === document.getElementById('updateModal')) {
+                            this.closeUpdateModal();
+                        }
+                    });
+                    
+                    // 模拟志愿卡片
+                    document.getElementById('volunteerCard').addEventListener('click', () => this.openVolunteerMenu());
+                    document.getElementById('closeMenuBtn').addEventListener('click', () => this.closeVolunteerMenu());
+                    document.getElementById('secondaryMenu').addEventListener('click', (e) => {
+                        if (e.target === document.getElementById('secondaryMenu')) {
+                            this.closeVolunteerMenu();
+                        }
+                    });
+                },
+                
+                onExamTypeClick: function(event) {
+                    document.querySelectorAll('.exam-type').forEach(t => t.classList.remove('active'));
+                    event.currentTarget.classList.add('active');
+                    currentExamType = event.currentTarget.getAttribute('data-type');
+                    
+                    const dateInput = document.getElementById('examDate');
+                    const yearInputGroup = document.querySelector('.year-input-group');
+                    
+                    if (currentExamType === 'gaokao') {
+                        dateInput.style.display = 'none';
+                        dateInput.previousElementSibling.style.display = 'none';
+                        yearInputGroup.style.display = 'block';
+                        yearInputGroup.previousElementSibling.style.display = 'block';
+                    } else {
+                        dateInput.style.display = 'block';
+                        dateInput.previousElementSibling.style.display = 'block';
+                        yearInputGroup.style.display = 'none';
+                        yearInputGroup.previousElementSibling.style.display = 'none';
+                    }
+                },
+                
+                setupDefaultValues: function() {
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    document.getElementById('examDate').value = tomorrow.toISOString().split('T')[0];
+                    
+                    const currentYear = new Date().getFullYear();
+                    document.getElementById('graduationYearInput').value = currentYear;
+                    
+                    const currentMonth = new Date().getMonth() + 1;
+                    document.getElementById('monthFilter').value = 'all';
+                    selectedMonth = 'all';
+                },
+                
+                loadExams: function() {
+                    const result = DataManager.loadData();
+                    if (result.success) {
+                        exams = result.data;
+                        this.updateExamCount();
+                        this.filterExamsByMonth();
+                    } else {
+                        ErrorHandler.handleError(result.error, '加载数据');
+                    }
+                },
+                
+                addExam: function() {
+                    const dateInput = document.getElementById('examDate');
+                    const examNameInput = document.getElementById('examName');
+                    const graduationYearInput = document.getElementById('graduationYearInput');
+                    
+                    let examDate, examName;
+                    
+                    if (currentExamType === 'gaokao') {
+                        const year = parseInt(graduationYearInput.value);
+                        if (!year || year < 2020 || year > 2099) {
+                            ErrorHandler.showError('请输入有效的毕业年份（2020-2099之间）！');
+                            return;
+                        }
+                        examDate = new Date(year, 5, 7);
+                        examName = `${year}年高考`;
+                    } else {
+                        const dateStr = dateInput.value;
+                        if (!dateStr) {
+                            ErrorHandler.showError('请选择考试日期！');
+                            return;
+                        }
+                        examDate = new Date(dateStr);
+                        examName = examNameInput.value || this.getExamTypeName(currentExamType);
+                    }
+                    
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    examDate.setHours(0, 0, 0, 0);
+                    
+                    if (examDate < today) {
+                        ErrorHandler.showError('考试日期不能是过去的时间！');
+                        return;
+                    }
+                    
+                    const exam = {
+                        type: currentExamType,
+                        name: examName,
+                        date: examDate,
+                        added: new Date()
+                    };
+                    
+                    const result = DataManager.addExam(exam);
+                    if (result.success) {
+                        exams = DataManager.getExams();
+                        this.updateExamCount();
+                        this.filterExamsByMonth();
+                        
+                        examNameInput.value = '';
+                        document.getElementById('noExamsMessage').style.display = 'none';
+                        
+                        this.showMessage(`已添加考试：${examName}`, 'success');
+                        
+                        if (ViewManager.getCurrentView() === 'calendar') {
+                            this.renderCalendar();
+                        }
+                    } else {
+                        ErrorHandler.handleError(result.error, '添加考试');
+                    }
+                },
+                
+                removeExam: function(id) {
+                    if (confirm('确定要删除这个考试倒计时吗？')) {
+                        const result = DataManager.removeExam(id);
+                        if (result.success) {
+                            exams = DataManager.getExams();
+                            this.updateExamCount();
+                            this.filterExamsByMonth();
+                            this.showMessage('考试已删除', 'success');
+                            
+                            if (ViewManager.getCurrentView() === 'calendar') {
+                                this.renderCalendar();
+                            }
+                        } else {
+                            ErrorHandler.handleError(result.error, '删除考试');
+                        }
+                    }
+                },
+                
+                clearData: function() {
+                    if (confirm('确定要清空所有考试数据吗？此操作不可恢复！')) {
+                        const result = DataManager.clearData();
+                        if (result.success) {
+                            exams = [];
+                            this.updateExamCount();
+                            this.filterExamsByMonth();
+                            this.renderCalendar();
+                            this.showMessage('数据已清空！', 'success');
+                        } else {
+                            ErrorHandler.handleError(result.error, '清空数据');
+                        }
+                    }
+                },
+                
+                onMonthFilterChange: function(event) {
+                    selectedMonth = event.target.value;
+                    this.filterExamsByMonth();
+                },
+                
+                filterExamsByMonth: function() {
+                    if (selectedMonth === 'all') {
+                        filteredExams = exams;
+                    } else {
+                        filteredExams = DataManager.getExamsByMonth(selectedMonth);
+                    }
+                    this.renderExams();
+                },
+                
+                onViewChange: function(event) {
+                    const view = event.currentTarget.dataset.view;
+                    ViewManager.setView(view);
+                    
+                    if (view === 'calendar') {
+                        this.renderCalendar();
+                    }
+                },
+                
+                onPrevMonth: function() {
+                    CalendarManager.gotoPrevMonth();
+                    this.renderCalendar();
+                },
+                
+                onNextMonth: function() {
+                    CalendarManager.gotoNextMonth();
+                    this.renderCalendar();
+                },
+                
+                onToday: function() {
+                    CalendarManager.gotoToday();
+                    this.renderCalendar();
+                },
+                
+                getExamTypeName: function(type) {
+                    const names = {
+                        'weekly': '周考',
+                        'monthly': '月考',
+                        'midterm': '期中',
+                        'final': '期末',
+                        'academic-test': '毕业学考',
+                        'first-model': '一模',
+                        'second-model': '二模',
+                        'third-model': '三模',
+                        'other': '其他',
+                        'gaokao': '高考'
+                    };
+                    return names[type] || '考试';
+                },
+                
+                updateExamCount: function() {
+                    const examCount = document.getElementById('examCount');
+                    if (examCount) {
+                        examCount.textContent = `共 ${exams.length} 个考试`;
+                    }
+                },
+                
+                renderExams: function() {
+                    const container = document.getElementById('countdownContainer');
+                    if (!container) return;
+                    
+                    container.innerHTML = '';
+                    
+                    if (filteredExams.length === 0) {
+                        document.getElementById('noExamsMessage').style.display = 'block';
+                        return;
+                    }
+                    
+                    document.getElementById('noExamsMessage').style.display = 'none';
+                    
+                    filteredExams.forEach(exam => {
+                        const card = this.createExamCard(exam);
+                        container.appendChild(card);
+                    });
+                },
+                
+                createExamCard: function(exam) {
+                    const card = document.createElement('div');
+                    card.className = 'countdown-card';
+                    card.dataset.id = exam.id;
+                    
+                    const timeLeft = CountdownManager.calculateTimeLeft(exam.date);
+                    const isUrgent = timeLeft.totalDays < 7 && !timeLeft.isOverdue;
+                    const isCompleted = timeLeft.isOverdue;
+                    
+                    if (isUrgent) {
+                        card.classList.add('urgent');
+                    }
+                    if (isCompleted) {
+                        card.classList.add('completed');
+                    }
+                    
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="exam-name">${exam.name}</div>
+                            <div class="exam-date">${this.formatDate(exam.date)}</div>
+                        </div>
+                        <div class="countdown-display">
+                            <div class="time-unit">
+                                <div class="time-value" id="days-${exam.id}">${timeLeft.days}</div>
+                                <div class="time-label">天</div>
+                            </div>
+                            <div class="time-unit">
+                                <div class="time-value" id="hours-${exam.id}">${timeLeft.hours}</div>
+                                <div class="time-label">小时</div>
+                            </div>
+                            <div class="time-unit">
+                                <div class="time-value" id="minutes-${exam.id}">${timeLeft.minutes}</div>
+                                <div class="time-label">分钟</div>
+                            </div>
+                            <div class="time-unit">
+                                <div class="time-value" id="seconds-${exam.id}">${timeLeft.seconds}</div>
+                                <div class="time-label">秒</div>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button onclick="App.editExam(${exam.id})" class="btn">
+                                <i class="fas fa-edit"></i> 编辑
+                            </button>
+                            <button onclick="App.removeExam(${exam.id})" class="btn btn-warning">
+                                <i class="fas fa-trash-alt"></i> 删除
+                            </button>
+                        </div>
+                    `;
+                    
+                    return card;
+                },
+                
+                renderCalendar: function() {
+                    const calendarGrid = document.getElementById('calendarGrid');
+                    const currentMonthElement = document.getElementById('currentMonth');
+                    const noCalendarExamsElement = document.getElementById('noCalendarExams');
+                    
+                    if (!calendarGrid || !currentMonthElement) return;
+                    
+                    currentMonthElement.textContent = CalendarManager.getMonthYearString();
+                    
+                    const days = CalendarManager.getMonthDays();
+                    const currentDate = CalendarManager.getCurrentDate();
+                    const today = new Date();
+                    
+                    calendarGrid.innerHTML = '';
+                    
+                    const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
+                    dayNames.forEach(dayName => {
+                        const dayHeader = document.createElement('div');
+                        dayHeader.className = 'calendar-day-header';
+                        dayHeader.textContent = dayName;
+                        calendarGrid.appendChild(dayHeader);
+                    });
+                    
+                    let hasExams = false;
+                    
+                    days.forEach(dayInfo => {
+                        const dayElement = document.createElement('div');
+                        dayElement.className = 'calendar-day';
+                        
+                        if (!dayInfo.isCurrentMonth) {
+                            dayElement.classList.add('other-month');
+                        }
+                        
+                        const dayNumber = document.createElement('div');
+                        dayNumber.className = 'calendar-day-number';
+                        dayNumber.textContent = dayInfo.date.getDate();
+                        dayElement.appendChild(dayNumber);
+                        
+                        if (dayInfo.isCurrentMonth && 
+                            dayInfo.date.getDate() === today.getDate() &&
+                            dayInfo.date.getMonth() === today.getMonth() &&
+                            dayInfo.date.getFullYear() === today.getFullYear()) {
+                            dayElement.classList.add('today');
+                        }
+                        
+                        const examsOnDay = DataManager.getExamsByDate(dayInfo.date);
+                        
+                        if (examsOnDay.length > 0) {
+                            hasExams = true;
+                            const examsContainer = document.createElement('div');
+                            examsContainer.className = 'calendar-exams';
+                            
+                            examsOnDay.forEach(exam => {
+                                const timeLeft = CountdownManager.calculateTimeLeft(exam.date);
+                                const isUrgent = timeLeft.totalDays < 7 && !timeLeft.isOverdue;
+                                const isCompleted = timeLeft.isOverdue;
+                                
+                                const examItem = document.createElement('div');
+                                examItem.className = 'calendar-exam-item';
+                                if (isUrgent) examItem.classList.add('urgent');
+                                if (isCompleted) examItem.classList.add('completed');
+                                
+                                examItem.innerHTML = `
+                                    <div class="calendar-exam-name">${exam.name}</div>
+                                    <div class="calendar-exam-type">${this.getExamTypeName(exam.type)}</div>
+                                `;
+                                
+                                examItem.addEventListener('click', () => {
+                                    this.scrollToExam(exam.id);
+                                });
+                                
+                                examsContainer.appendChild(examItem);
+                            });
+                            
+                            dayElement.appendChild(examsContainer);
+                        }
+                        
+                        calendarGrid.appendChild(dayElement);
+                    });
+                    
+                    if (noCalendarExamsElement) {
+                        noCalendarExamsElement.style.display = hasExams ? 'none' : 'block';
+                    }
+                },
+                
+                scrollToExam: function(examId) {
+                    ViewManager.setView('list');
+                    
+                    setTimeout(() => {
+                        const examCard = document.querySelector(`.countdown-card[data-id="${examId}"]`);
+                        if (examCard) {
+                            examCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            
+                            examCard.style.animation = 'none';
+                            setTimeout(() => {
+                                examCard.style.animation = 'pulse 1s';
+                            }, 10);
+                        }
+                    }, 100);
+                },
+                
+                editExam: function(id) {
+                    const exam = exams.find(e => e.id === id);
+                    if (!exam) return;
+                    
+                    // 将考试信息填充到编辑表单
+                    document.getElementById('examName').value = exam.name;
+                    document.getElementById('examDate').value = exam.date.toISOString().split('T')[0];
+                    
+                    if (exam.type === 'gaokao') {
+                        const year = exam.date.getFullYear();
+                        document.getElementById('graduationYearInput').value = year;
+                    }
+                    
+                    document.querySelectorAll('.exam-type').forEach(type => {
+                        type.classList.toggle('active', type.getAttribute('data-type') === exam.type);
+                    });
+                    currentExamType = exam.type;
+                    
+                    // 直接删除原始考试，不显示确认对话框
+                    const result = DataManager.removeExam(id);
+                    if (result.success) {
+                        exams = DataManager.getExams();
+                        this.updateExamCount();
+                        this.filterExamsByMonth();
+                        this.showMessage('已加载考试信息到编辑框，可直接修改后重新添加', 'success');
+                    } else {
+                        ErrorHandler.handleError(result.error, '编辑考试');
+                    }
+                },
+                
+                startCountdown: function() {
+                    CountdownManager.start(() => {
+                        this.updateCountdowns();
+                    });
+                },
+                
+                updateCountdowns: function() {
+                    exams.forEach(exam => {
+                        const timeLeft = CountdownManager.calculateTimeLeft(exam.date);
+                        
+                        const daysEl = document.getElementById(`days-${exam.id}`);
+                        const hoursEl = document.getElementById(`hours-${exam.id}`);
+                        const minutesEl = document.getElementById(`minutes-${exam.id}`);
+                        const secondsEl = document.getElementById(`seconds-${exam.id}`);
+                        
+                        if (daysEl) daysEl.textContent = timeLeft.days;
+                        if (hoursEl) hoursEl.textContent = timeLeft.hours;
+                        if (minutesEl) minutesEl.textContent = timeLeft.minutes;
+                        if (secondsEl) secondsEl.textContent = timeLeft.seconds;
+                    });
+                },
+                
+                formatDate: function(date) {
+                    const year = date.getFullYear();
+                    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                    const day = date.getDate().toString().padStart(2, '0');
+                    return `${year}年${month}月${day}日`;
+                },
+                
+                showMessage: function(message, type = 'info') {
+                    const messageEl = document.createElement('div');
+                    messageEl.textContent = message;
+                    messageEl.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        padding: 12px 20px;
+                        border-radius: 8px;
+                        color: white;
+                        font-weight: 600;
+                        z-index: 1002;
+                        animation: slideInRight 0.3s ease;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    `;
+                    
+                    if (type === 'success') {
+                        messageEl.style.backgroundColor = '#2ecc71';
+                    } else if (type === 'error') {
+                        messageEl.style.backgroundColor = '#e74c3c';
+                    } else {
+                        messageEl.style.backgroundColor = '#3498db';
+                    }
+                    
+                    document.body.appendChild(messageEl);
+                    
+                    setTimeout(() => {
+                        messageEl.style.animation = 'slideOutRight 0.3s ease';
+                        setTimeout(() => {
+                            if (messageEl.parentNode) {
+                                messageEl.parentNode.removeChild(messageEl);
+                            }
+                        }, 300);
+                    }, 3000);
+                },
+                
+                openUpdateModal: function() {
+                    document.getElementById('updateModal').classList.add('active');
+                },
+                
+                closeUpdateModal: function() {
+                    document.getElementById('updateModal').classList.remove('active');
+                },
+                
+                openVolunteerMenu: function() {
+                    const menu = document.getElementById('secondaryMenu');
+                    menu.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                    document.getElementById('volunteerFrame').src = 'https://gaokao.baidu.com/okam/pages/cwb-page/index';
+                },
+                
+                closeVolunteerMenu: function() {
+                    const menu = document.getElementById('secondaryMenu');
+                    menu.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    document.getElementById('volunteerFrame').src = '';
+                }
+            };
+        })();
+        
+        // 全局导出函数
+        window.App = App;
+        
+        // 添加CSS动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); }
+                70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 页面加载完成后初始化应用
+        document.addEventListener('DOMContentLoaded', function() {
+            App.init();
+        });
+    </script>
+</body>
+</html>
